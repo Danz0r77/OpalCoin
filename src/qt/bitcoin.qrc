@@ -3,6 +3,7 @@
         <file alias="bitcoin">res/icons/opalcoin.png</file>
         <file alias="coinbg">res/icons/opalcoin256.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
+        <file alias="opalex">res/icons/opalex.png</file>
         <file alias="quit">res/icons/quit.png</file>
         <file alias="send">res/icons/send.png</file>
         <file alias="toolbar">res/icons/opalcoin.png</file>
