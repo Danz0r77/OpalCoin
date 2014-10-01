@@ -57,6 +57,7 @@ src/test_opalcoin
 Makefile
 opalcoin-qt
 OpalCoin-Qt.app
+.qmake.stash
 
 # Unit-tests
 Makefile.test

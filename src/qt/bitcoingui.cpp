@@ -9,6 +9,7 @@
 #include "addressbookpage.h"
 #include "messagepage.h"
 #include "sendcoinsdialog.h"
+#include "tradingdialog.h"
 #include "signverifymessagedialog.h"
 #include "optionsdialog.h"
 #include "aboutdialog.h"
@@ -63,7 +64,7 @@
 #include <QStyle>
 #include <QTextStream>
 #include <QTextDocument>
-
+#include <QDebug>
 #include <iostream>
 
 extern CWallet* pwalletMain;
@@ -128,6 +129,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     signVerifyMessageDialog = new SignVerifyMessageDialog(this);
 
+    tradingDialogPage = new tradingDialog(this);
+
     centralWidget = new QStackedWidget(this);
     centralWidget->addWidget(overviewPage);
     centralWidget->addWidget(statisticsPage);
@@ -138,6 +141,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     centralWidget->addWidget(receiveCoinsPage);
     centralWidget->addWidget(sendCoinsPage);
     centralWidget->addWidget(messagePage);
+    centralWidget->addWidget(tradingDialogPage);
     setCentralWidget(centralWidget);
 
     // Create status bar
@@ -200,6 +204,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     // Double-clicking on a transaction on the transaction history page shows details
     connect(transactionView, SIGNAL(doubleClicked(QModelIndex)), transactionView, SLOT(showDetails()));
+
+    connect(TradingAction, SIGNAL(triggered()), tradingDialogPage, SLOT(InitTrading()));
 
     rpcConsole = new RPCConsole(this);
     connect(openRPCConsoleAction, SIGNAL(triggered()), rpcConsole, SLOT(show()));
@@ -265,6 +271,12 @@ void BitcoinGUI::createActions()
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
+    TradingAction = new QAction(QIcon(":/icons/address-book"), tr("&Trade"), this);
+    TradingAction ->setToolTip(tr("Start Trading"));
+    TradingAction ->setCheckable(true);
+    TradingAction ->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    tabGroup->addAction(TradingAction);
+
     messageAction = new QAction(QIcon(":/icons/opacity"),tr("Opacity"), this);
     messageAction->setToolTip(tr("View and Send Encrypted messages"));
     messageAction->setCheckable(true);
@@ -290,6 +302,7 @@ void BitcoinGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
+    connect(TradingAction, SIGNAL(triggered()), this, SLOT(gotoTradingPage()));
     connect(messageAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(messageAction, SIGNAL(triggered()), this, SLOT(gotoMessagePage()));
 
@@ -387,6 +400,7 @@ void BitcoinGUI::createToolBars()
     toolbar->addAction(statisticsAction);
     toolbar->addAction(blockAction);
     toolbar->addAction(chatAction);
+    toolbar->addAction(TradingAction);
 
     QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
     toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -873,6 +887,12 @@ void BitcoinGUI::gotoMessagePage()
     exportAction->setEnabled(true);
     disconnect(exportAction, SIGNAL(triggered()), 0, 0);
     connect(exportAction, SIGNAL(triggered()), messagePage, SLOT(exportClicked()));
+}
+
+void BitcoinGUI::gotoTradingPage()
+{
+     TradingAction->setChecked(true);
+     centralWidget->setCurrentWidget(tradingDialogPage);
 }
 
 
