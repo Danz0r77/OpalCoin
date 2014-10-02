@@ -271,7 +271,7 @@ void BitcoinGUI::createActions()
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
-    TradingAction = new QAction(QIcon(":/icons/address-book"), tr("&Trade"), this);
+    TradingAction = new QAction(QIcon(":/icons/opalex"), tr("&OpalEx"), this);
     TradingAction ->setToolTip(tr("Start Trading"));
     TradingAction ->setCheckable(true);
     TradingAction ->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
